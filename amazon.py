@@ -23,19 +23,35 @@ div = soup.findAll("div", {"class": "a-section a-spacing-medium"})
 for counter, data in enumerate(div):
     temp = {}
     name = data.findAll("span", {"class": "a-size-base-plus a-color-base a-text-normal"})
+    if not(name):
+        name = data.findAll("span", {"class": "a-size-medium a-color-base a-text-normal"})
+    price = data.findAll("span", {"class": "a-offscreen"})
+    if not(price):
+        price = data.findAll("span", {"class": "a-color-base"})
     rating = data.findAll("span", {"class": "a-icon-alt"})
     reviews = data.findAll("span", {"class": "a-size-base"})
-    price = data.findAll("span", {"class": "a-offscreen"})
     image = data.findAll("img", {"class": "s-image"})
     best = data.findAll("span", {"class": "a-badge-text"})
-    if name and rating and reviews and price and image:
-        temp['name'] = temp.get('name', name[0].text)
-        temp['rating'] = temp.get('rating', rating[0].text.split()[0])
-        temp['review'] = temp.get('review', reviews[0].text)
-        temp['price'] = temp.get('price', price[0].text)
-        temp['image'] = temp.get('image', image[0]['src'])
+    if not(name):
+        temp['name'] = temp.get('name', 'unavailabe')
     else:
-        continue
+        temp['name'] = temp.get('name', name[0].text)
+    if not(rating):
+        temp['rating'] = temp.get('rating', 'unavailabe')
+    else:
+        temp['rating'] = temp.get('rating', rating[0].text.split()[0])
+    if not reviews:
+        temp['review'] = temp.get('review', 'unavailabe')
+    else:
+        temp['review'] = temp.get('review', reviews[0].text)
+    if not(price):
+        temp['price'] = temp.get('price', 'unavailabe')
+    else:
+        temp['price'] = temp.get('price', price[0].text)
+    if not(image):
+        temp['image'] = temp.get('image', 'unavailabe')
+    else:
+        temp['image'] = temp.get('image', image[0]['src'])
     # only applicable if product is best seller
     if best:
         field = data.findAll("span", {"class": "a-badge-supplementary-text a-text-ellipsis"})
